@@ -49,6 +49,17 @@
 				<string></string>
 			</dict>
 		</array>
+		<key>7B399353-AE8F-464F-87BF-5D8041B9A923</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>349E873C-CB8D-4BBD-A87A-38C2153B7E3D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>Praveen Gowda I V</string>
@@ -60,6 +71,54 @@
 	<string>CocoaPods Search</string>
 	<key>objects</key>
 	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>36</integer>
+				<key>keyword</key>
+				<string>podc</string>
+				<key>runningsubtext</key>
+				<string>Retrieving matching pods ...</string>
+				<key>script</key>
+				<string>require_once('workflows.php');
+$wf = new Workflows();
+
+$orig = "{query}";
+$json = $wf-&gt;request( "http://search.cocoapods.org/api/pods?query=".urlencode( $orig ), array(CURLOPT_HTTPHEADER =&gt; array("Accept: application/vnd.cocoapods.org+flat.hash.json")));
+$result = json_decode($json);
+$int = 1;
+
+foreach( $result as $pod ):
+	$arg = array('name' =&gt; $pod-&gt;id, 'link' =&gt; $pod-&gt;link, 'version' =&gt; $pod-&gt;version);
+	$wf-&gt;result( $int.'.'.time(), json_encode($arg), "$pod-&gt;id($pod-&gt;version)", "$pod-&gt;summary", 'icon.png', 'yes', $pod-&gt;id );
+	$int++;
+endforeach;
+
+$results = $wf-&gt;results();
+if ( count( $results ) == 0 ):
+	$wf-&gt;result( 'podsearch', $orig, 'No Suggestions', 'No such pods found' );
+endif;
+
+echo $wf-&gt;toxml();</string>
+				<key>subtext</key>
+				<string>Search for pods</string>
+				<key>title</key>
+				<string>Copy CocoaPods</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>7B399353-AE8F-464F-87BF-5D8041B9A923</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
 		<dict>
 			<key>config</key>
 			<dict>
@@ -84,7 +143,7 @@
 				<string>$query = '{query}';
 $query = html_entity_decode($query);
 $result = json_decode($query);
-echo "pod " . $result-&gt;name . ", '~&gt; " . $result-&gt;version . "'";</string>
+echo "pod '" . $result-&gt;name . "', '~&gt; " . $result-&gt;version . "'";</string>
 				<key>type</key>
 				<integer>1</integer>
 			</dict>
@@ -212,6 +271,11 @@ Usage
 		<dict>
 			<key>ypos</key>
 			<real>160</real>
+		</dict>
+		<key>7B399353-AE8F-464F-87BF-5D8041B9A923</key>
+		<dict>
+			<key>ypos</key>
+			<real>40</real>
 		</dict>
 		<key>A5065456-2E24-4060-B620-FD6922D2E665</key>
 		<dict>
