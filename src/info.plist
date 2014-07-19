@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.alfredapp.praveen.cocoapod</string>
+	<key>category</key>
+	<string>Productivity</string>
+	<key>connections</key>
+	<dict>
+		<key>034A2CD5-4A38-4434-8FAB-770CC638E75E</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>0CC40D34-8A08-4FA2-A157-091D5A9DFD83</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>349E873C-CB8D-4BBD-A87A-38C2153B7E3D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A5065456-2E24-4060-B620-FD6922D2E665</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>349E873C-CB8D-4BBD-A87A-38C2153B7E3D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>034A2CD5-4A38-4434-8FAB-770CC638E75E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Praveen Gowda I V</string>
+	<key>description</key>
+	<string>Search CocoaPods from Alfred</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>CocoaPods Search</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>A5065456-2E24-4060-B620-FD6922D2E665</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>$query = '{query}';
+$query = html_entity_decode($query);
+$result = json_decode($query);
+echo "pod " . $result-&gt;name . ", '~&gt; " . $result-&gt;version . "'";</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>349E873C-CB8D-4BBD-A87A-38C2153B7E3D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>36</integer>
+				<key>keyword</key>
+				<string>pod</string>
+				<key>runningsubtext</key>
+				<string>Retrieving matching pods ...</string>
+				<key>script</key>
+				<string>require_once('workflows.php');
+$wf = new Workflows();
+
+$orig = "{query}";
+$json = $wf-&gt;request( "http://search.cocoapods.org/api/pods?query=".urlencode( $orig ), array(CURLOPT_HTTPHEADER =&gt; array("Accept: application/vnd.cocoapods.org+flat.hash.json")));
+$result = json_decode($json);
+$int = 1;
+
+foreach( $result as $pod ):
+	$arg = array('name' =&gt; $pod-&gt;id, 'link' =&gt; $pod-&gt;link, 'version' =&gt; $pod-&gt;version);
+	$wf-&gt;result( $int.'.'.time(), json_encode($arg), "$pod-&gt;id($pod-&gt;version)", "$pod-&gt;summary", 'icon.png', 'yes', $pod-&gt;id );
+	$int++;
+endforeach;
+
+$results = $wf-&gt;results();
+if ( count( $results ) == 0 ):
+	$wf-&gt;result( 'podsearch', $orig, 'No Suggestions', 'No such pods found' );
+endif;
+
+echo $wf-&gt;toxml();</string>
+				<key>subtext</key>
+				<string>Search for pods</string>
+				<key>title</key>
+				<string>Search CocoaPods</string>
+				<key>type</key>
+				<integer>1</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>63F60794-BB56-4415-9372-BAF974C3A7E1</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>127</integer>
+				<key>script</key>
+				<string>open "{query}"</string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.script</string>
+			<key>uid</key>
+			<string>0CC40D34-8A08-4FA2-A157-091D5A9DFD83</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>escaping</key>
+				<integer>0</integer>
+				<key>script</key>
+				<string>$query = '{query}';
+$query = html_entity_decode($query);
+$result = json_decode($query);
+echo $result-&gt;link;</string>
+				<key>type</key>
+				<integer>1</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>034A2CD5-4A38-4434-8FAB-770CC638E75E</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string>alfred-cocoapods
+================
+
+Alfred workflow to search CocoaPods from Alfred. Opens the library URL and copies the dependency string to the clipboard so that you can paste it into the Podfile directly.
+
+Usage
+—————
+
+`pod` {query}</string>
+	<key>uidata</key>
+	<dict>
+		<key>034A2CD5-4A38-4434-8FAB-770CC638E75E</key>
+		<dict>
+			<key>ypos</key>
+			<real>330</real>
+		</dict>
+		<key>0CC40D34-8A08-4FA2-A157-091D5A9DFD83</key>
+		<dict>
+			<key>ypos</key>
+			<real>330</real>
+		</dict>
+		<key>349E873C-CB8D-4BBD-A87A-38C2153B7E3D</key>
+		<dict>
+			<key>ypos</key>
+			<real>70</real>
+		</dict>
+		<key>63F60794-BB56-4415-9372-BAF974C3A7E1</key>
+		<dict>
+			<key>ypos</key>
+			<real>160</real>
+		</dict>
+		<key>A5065456-2E24-4060-B620-FD6922D2E665</key>
+		<dict>
+			<key>ypos</key>
+			<real>70</real>
+		</dict>
+	</dict>
+	<key>webaddress</key>
+	<string>praveengowda.com</string>
+</dict>
+</plist>
