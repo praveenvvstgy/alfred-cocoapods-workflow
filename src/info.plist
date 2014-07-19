@@ -122,21 +122,6 @@ echo $wf-&gt;toxml();</string>
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>autopaste</key>
-				<false/>
-				<key>clipboardtext</key>
-				<string>{query}</string>
-			</dict>
-			<key>type</key>
-			<string>alfred.workflow.output.clipboard</string>
-			<key>uid</key>
-			<string>A5065456-2E24-4060-B620-FD6922D2E665</string>
-			<key>version</key>
-			<integer>0</integer>
-		</dict>
-		<dict>
-			<key>config</key>
-			<dict>
 				<key>escaping</key>
 				<integer>0</integer>
 				<key>script</key>
@@ -151,6 +136,21 @@ echo "pod '" . $result-&gt;name . "', '~&gt; " . $result-&gt;version . "'";</str
 			<string>alfred.workflow.action.script</string>
 			<key>uid</key>
 			<string>349E873C-CB8D-4BBD-A87A-38C2153B7E3D</string>
+			<key>version</key>
+			<integer>0</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>autopaste</key>
+				<false/>
+				<key>clipboardtext</key>
+				<string>{query}</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.clipboard</string>
+			<key>uid</key>
+			<string>A5065456-2E24-4060-B620-FD6922D2E665</string>
 			<key>version</key>
 			<integer>0</integer>
 		</dict>
@@ -249,7 +249,19 @@ Alfred workflow to search CocoaPods from Alfred. Opens the library URL and copie
 Usage
 —————
 
-`pod` {query}</string>
++ to search for cocoapods
+	
+	```
+	pod {query}
+	```
+	Clicking return opens the project page and copies to dependency string to clipboard
+
++ to copy dependency string
+	
+	```
+	pod {query}
+	```
+	Clicking return only copies the dependency string to clipboard which can be pasted directly to the Podfile</string>
 	<key>uidata</key>
 	<dict>
 		<key>034A2CD5-4A38-4434-8FAB-770CC638E75E</key>
